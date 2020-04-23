@@ -1,0 +1,15 @@
+== Download photos. ==
+--sample really doesn't matter as it's hardcoded to get all the photos from the specified album.
+Command:
+python downloader.py xxxxxx@me.com icloudpassword --output=media/marcopi --sample=10 --orientation=landscape --album=iCloudAlbum
+
+== Start frame ==
+It needs the config.yml that comes in this project. There must be a "marcopi" directory inside "media"
+Command:
+python frame.py
+
+== TODO ==
+[] Remove harcoded parameters and make them real parameters.
+[] Allow to choose how many photos to download.
+[] Remove all unneeded code.
+
