@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+import subprocess
 
 from pyicloud import PyiCloudService
 from tqdm import tqdm
@@ -120,17 +121,20 @@ class IcloudPhotos:
         @:param requested_orientation: the requested_orientation of the network (portrait, landscape or None)
         @:return: a list of matching network
         """
-        logger.debug("requested_orientation = %s", requested_orientation)
+        logger.info("Requesting all photos for %s", album)
+        logger.info("requested_orientation = %s", requested_orientation)
         eligible_photos = []
         for i, photo in enumerate(self.api.photos.albums[album]):
-            logger.debug("%d - Checking %s", i, photo.filename)
+            logger.info("%d - Checking %s", i, photo.filename)
             # asset_types.add(photo._master_record["fields"]["itemType"]["value"])
             if IcloudPhotos.is_image(photo) and IcloudPhotos.is_correct_format(photo, requested_orientation):
-                logger.debug("Adding photo")
+                logger.info("Adding photo")
                 eligible_photos.append(photo)
             else:
-                logger.debug("Skipping %s", photo.filename)
+                logger.info("Skipping %s, but not really, check it later.", photo.filename)
+                eligible_photos.append(photo)
 
+        logger.info("Get All Photos done.");
         return eligible_photos
 
     @staticmethod
@@ -143,8 +147,13 @@ class IcloudPhotos:
         """
         for i, photo in tqdm(enumerate(photos), desc="Downloading photos", unit="photo", total=len(photos)):
             with open(os.path.join(folder, photo.filename), 'wb') as opened_file:
+#                if photo.filename.endswith('.HEIC'):
+#                    continue
+
                 logger.debug("%d - [%s %s %s]", i, photo.filename, photo.dimensions,
                              photo._master_record["fields"]["originalOrientation"]["value"])
+
+                logger.info("Downloading: %s", photo.filename)
 
                 # try latest record first (if available)
                 try:
@@ -157,7 +166,32 @@ class IcloudPhotos:
                 # otherwise get original record
                 except KeyError:
                     data = photo.download().raw.read()
+
                 opened_file.write(data)
+
+            imageToCrop = os.path.join(folder, photo.filename)
+            if photo.filename.endswith('.HEIC'):
+                imagePATH = os.path.join(folder, photo.filename)
+                logger.info("Mogrify: Converting %s to JPG.", imagePATH)
+                subprocess.run(["mogrify", "-format", "JPG", imagePATH])
+                logger.info("Mogrify: %s created.")
+
+                base = os.path.splitext(imagePATH)[0]
+                imageToCrop = convertedName = base + ".JPG"
+
+                subprocess.run(["rm", imagePATH ])
+                logger.info("%s Deleted.", imagePATH)
+
+            logger.info("Going to crop %s", imageToCrop)
+            subprocess.run(["aspectcrop", "-a", "5:3", imageToCrop, imageToCrop])
+
+
+#        _pathToHEICs = folder + '/' + "*.HEIC"
+        #mogrify -format JPG marcopi/IMG_1144.HEIC
+#        logger.info("Running mogrify to convert HEIC files to JPG, output: %s", _pathToHEICs)
+#        subprocess.run(["mogrify", "-format", "JPG", _pathToHEICs ])
+#        subprocess.run(["rm", _pathToHEICs ])
+#        logger.info("Mogrify done")
 
     def get_albums(self):
         return self.api.photos.albums

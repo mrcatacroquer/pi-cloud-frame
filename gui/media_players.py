@@ -148,6 +148,7 @@ class AbstractMediaPlayer(PhotoFrameContent):
         Overlay the logo on a pixmap
         :param pmap: the photo
         """
+        return
         painter = QPainter()
         painter.begin(pmap)
         painter.drawImage(pmap.width() - self.photo_frame.watermark.width() - 40,
@@ -267,9 +268,9 @@ class PhotoPlayer(AbstractMediaPlayer):
                 QtCore.Qt.SmoothTransformation)
 
             # add the watermark (unrotate, watermark, rotate)
-            pmap = pmap.transformed(QtGui.QTransform().rotate(-angle_to_rotate_photo))
-            self.paint_watermark(pmap)
-            pmap = pmap.transformed(QtGui.QTransform().rotate(angle_to_rotate_photo))
+            #pmap = pmap.transformed(QtGui.QTransform().rotate(-angle_to_rotate_photo))
+            #self.paint_watermark(pmap)
+            #pmap = pmap.transformed(QtGui.QTransform().rotate(angle_to_rotate_photo))
 
             self.main_window.setPixmap(pmap)
             return True

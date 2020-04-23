@@ -72,7 +72,7 @@ class PhotoFrame(QtWidgets.QMainWindow):
             self.compass = None
 
         # create a watermark based on the logo
-        self.watermark = self.logo_large.scaledToWidth(50, QtCore.Qt.SmoothTransformation)
+        #self.watermark = self.logo_large.scaledToWidth(50, QtCore.Qt.SmoothTransformation)
 
         # screen dimensions
         self.frame_size = QGuiApplication.primaryScreen().geometry().size()

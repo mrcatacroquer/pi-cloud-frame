@@ -1,0 +1,12 @@
+frame:
+    slideshow_delay: 10800000
+    root_folder: media
+    font: 14
+
+players:
+    Marcopi:
+        type: photo_player
+        folder: marcopi
+
+    My dashboard:
+        type: dashboard

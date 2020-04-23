@@ -1,0 +1,23 @@
+== Download photos. ==
+--sample really doesn't matter as it's hardcoded to get all the photos from the specified album.
+Command:
+python downloader.py xxxxxx@me.com icloudpassword --output=media/marcopi --sample=10 --orientation=landscape --album=iCloudAlbum
+
+== Start frame ==
+It needs the config.yml that comes in this project. There must be a "marcopi" directory inside "media"
+Command:
+python frame.py
+
+== CRON ==
+Edit the crontab list to add the camera thing. And, a command to stop and start the screen...
+crontab -e
+
+*/10 * * * * /home/pi/pi-cloud-frame/runcamera.sh
+30 7  * * * vcgencmd display_power 1
+0 0 * * * vcgencmd display_power 0
+
+== TO-DO ==
+[ ] Remove harcoded parameters and make them real parameters.
+[ ] Allow to choose how many photos to download.
+[ ] Remove all unneeded code.
+[ ] Make my own splash logo
