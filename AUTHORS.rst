@@ -10,4 +10,5 @@ Development Lead
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Manuel Lucio Dallo <manulucio@gmail.com> (I'll add myself here, although I don't foresee to push my changes back... :P)
+
