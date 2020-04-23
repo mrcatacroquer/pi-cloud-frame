@@ -51,11 +51,11 @@ def main():
         sys.exit(1)
 
     # get a random sample to download
-    logger.info("Selecting random sample (%d from %d)", args.sample, len(photos))
-    photos_sample = photo_utils.get_sample(photos, args.sample)
+    #logger.info("Selecting random sample (%d from %d)", args.sample, len(photos))
+    #photos_sample = photo_utils.get_sample(photos, args.sample)
 
-    logger.info("Downloading photos to %s...", args.output)
-    IcloudPhotos.download(photos_sample, args.output)
+    logger.info("Downloading %d photos to %s...", len(photos), args.output)
+    IcloudPhotos.download(photos, args.output)
 
 
 if __name__ == '__main__':
